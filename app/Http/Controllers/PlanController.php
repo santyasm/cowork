@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Plan;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class PlanController extends Controller
 {
@@ -12,7 +13,17 @@ class PlanController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $plans = Plan::all();
+
+            // return response()->json($plans, 200);
+
+            return Inertia::render('plans/Index', [
+                'plans' => $plans,
+            ]);
+        } catch (\Exception $ex) {
+            response()->json(['message' => 'Erro ao buscar planos.'], 404);
+        }
     }
 
     /**
