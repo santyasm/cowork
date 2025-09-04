@@ -41,4 +41,14 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    public function admin(): static
+    {
+        return $this->state(fn(array $attributes) => [
+            'name' => 'Admin',
+            'role' => 'admin',
+            'email' => 'admin@laravel.com',
+            'password' => Hash::make('admin123'),
+        ]);
+    }
 }
