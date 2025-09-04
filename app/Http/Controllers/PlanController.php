@@ -14,9 +14,7 @@ class PlanController extends Controller
     public function index()
     {
         try {
-            $plans = Plan::all();
-
-            // return response()->json($plans, 200);
+            $plans = Plan::with('rooms')->get();
 
             return Inertia::render('plans/Index', [
                 'plans' => $plans,
