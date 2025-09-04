@@ -17,4 +17,10 @@ class Plan extends Model
         'hours_room',
         'hours_desk'
     ];
+
+
+    public function rooms()
+    {
+        return $this->belongsToMany(Room::class, 'plan_room');
+    }
 }

@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             PlanSeeder::class,
-            RoomSeeder::class
+            // RoomSeeder::class
         ]);
     }
 }
