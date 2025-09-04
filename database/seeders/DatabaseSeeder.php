@@ -17,7 +17,8 @@ class DatabaseSeeder extends Seeder
         User::factory(4)->create([]);
 
         $this->call([
-            PlanSeeder::class
+            PlanSeeder::class,
+            RoomSeeder::class
         ]);
     }
 }
