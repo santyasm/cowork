@@ -19,14 +19,20 @@ class SubscriptionController extends Controller
     {
         try {
             $user = Auth::user();
-
-            if ($user->role !== 'admin') {
-                throw new Exception('Usuario nao autorizado.');
+            if ($user->role === 'admin') {
+                $subscriptions = Subscription::all();
+                return response()->json($subscriptions, 200);
             }
 
-            $subscriptions = Subscription::all();
 
-            return response()->json($subscriptions, 200);
+            $subscriptions = Auth::user()
+                ->subscriptions()
+                ->with('plan')
+                ->get();
+
+            return inertia('subscriptions/Index', [
+                'subscriptions' => $subscriptions
+            ]);
         } catch (\Exception $ex) {
             return response()->json(['Erro ao buscar assinaturas: ' => $ex->getMessage()], 400);
         }
@@ -47,10 +53,14 @@ class SubscriptionController extends Controller
     {
         $data = $request->validated();
 
+
         $plan = Plan::findOrFail($data['plan_id']);
 
         try {
             $user = Auth::user();
+
+            $user->subscriptions()->where('status', 'active')->update(['status' => 'canceled']);
+
             Subscription::create([
                 'user_id' => $user->id,
                 'plan_id' => $plan->id,
