@@ -14,6 +14,21 @@ const mainNavItems: NavItem[] = [
         href: dashboard(),
         icon: LayoutGrid,
     },
+    {
+        title: 'Salas',
+        href: '/rooms',
+        icon: LayoutGrid,
+    },
+    {
+        title: 'Planos',
+        href: '/plans',
+        icon: LayoutGrid,
+    },
+    {
+        title: 'Assinaturas',
+        href: '/subscriptions',
+        icon: LayoutGrid,
+    },
 ];
 
 const footerNavItems: NavItem[] = [
