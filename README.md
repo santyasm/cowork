@@ -6,6 +6,8 @@
 
 Sistema de gestão de coworking que permite reservas de salas e mesas, administração de planos e integração com usuários em uma plataforma moderna e intuitiva.
 
+> ⚠️ **Aviso**: Este projeto foi criado apenas para fins de **prática e estudos pessoais**.
+
 ---
 
 ## 🔗 Teste a Aplicação
