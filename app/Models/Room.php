@@ -20,4 +20,9 @@ class Room extends Model
     {
         return $this->belongsToMany(Plan::class, 'plan_room');
     }
+
+    public function subscriptions()
+    {
+        return $this->belongsToMany(Subscription::class);
+    }
 }
