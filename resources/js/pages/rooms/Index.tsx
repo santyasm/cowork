@@ -136,7 +136,7 @@ export default function Index() {
                                     <img
                                         src={`/images/rooms/${room.id}.jpg`}
                                         alt=""
-                                        className="aspect-video h-[300px] w-auto bg-amber-100 object-cover transition-transform duration-300 hover:scale-105"
+                                        className="aspect-video h-[100px] w-full rounded-md bg-amber-100 object-cover transition-transform duration-300 hover:scale-105 md:h-[300px]"
                                     />
                                     <p>Capacidade: {room.capacity}</p>
                                     <p className="mt-2 text-gray-600">{room.description}</p>
