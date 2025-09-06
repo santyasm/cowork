@@ -6,7 +6,6 @@ export function Footer() {
     return (
         <footer className="w-full border-t border-gray-200 bg-white dark:border-gray-800 dark:bg-[#0a0a0a]">
             <div className="mx-auto grid max-w-7xl gap-10 px-6 py-12 md:grid-cols-3 md:px-12 lg:px-20">
-                {/* Logo + Descrição */}
                 <div className="flex flex-col gap-4">
                     <AppLogo />
                     <p className="max-w-xs text-sm text-gray-600 dark:text-gray-400">
@@ -14,7 +13,6 @@ export function Footer() {
                     </p>
                 </div>
 
-                {/* Links */}
                 <div className="flex flex-col gap-3 text-sm">
                     <h3 className="mb-2 font-semibold text-gray-900 dark:text-gray-100">Navegação</h3>
                     <Link href="#" className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200">
@@ -52,10 +50,12 @@ export function Footer() {
                 </div>
             </div>
 
-            {/* Copyright */}
             <div className="border-t border-gray-200 py-6 dark:border-gray-800">
                 <p className="text-center text-sm text-gray-500 dark:text-gray-400">
                     © {new Date().getFullYear()} Cowork. Todos os direitos reservados.
+                </p>
+                <p className="mt-2 text-center text-sm text-gray-500 dark:text-gray-400">
+                    Feito com <span className="animate-pulse text-green-600">💚</span> por Yasmin Santana
                 </p>
             </div>
         </footer>
