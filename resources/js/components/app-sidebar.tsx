@@ -1,11 +1,10 @@
-import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
+import { BookOpen, Folder, LayoutGrid, Sofa, SquareKanban, Vote } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -17,17 +16,17 @@ const mainNavItems: NavItem[] = [
     {
         title: 'Salas',
         href: '/rooms',
-        icon: LayoutGrid,
+        icon: Sofa,
     },
     {
         title: 'Planos',
         href: '/plans',
-        icon: LayoutGrid,
+        icon: SquareKanban,
     },
     {
         title: 'Assinaturas',
         href: '/subscriptions',
-        icon: LayoutGrid,
+        icon: Vote,
     },
 ];
 
@@ -50,8 +49,8 @@ export function AppSidebar() {
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton size="lg" asChild>
-                            <Link href={dashboard()} prefetch>
+                        <SidebarMenuButton size="lg">
+                            <Link href="/" prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
@@ -64,7 +63,7 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
+                {/* <NavFooter items={footerNavItems} className="mt-auto" /> */}
                 <NavUser />
             </SidebarFooter>
         </Sidebar>
