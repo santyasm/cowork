@@ -41,9 +41,13 @@ export default function Index() {
         return `${year}-${month}-${day}T${hours}:${minutes}`;
     };
 
-    const [startTime, setStartTime] = useState(() => formatDateTimeLocal(getNow()));
+    const [startTime, setStartTime] = useState(() => {
+        const plusTenMinutes = new Date(getNow().getTime() + 10 * 60 * 1000);
+        return formatDateTimeLocal(plusTenMinutes);
+    });
+
     const [endTime, setEndTime] = useState(() => {
-        const plusOneHour = new Date(getNow().getTime() + 60 * 60 * 1000);
+        const plusOneHour = new Date(new Date(getNow().getTime() + 10 * 60 * 1000).getTime() + 60 * 60 * 1000);
         return formatDateTimeLocal(plusOneHour);
     });
 
