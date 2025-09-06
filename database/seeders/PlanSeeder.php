@@ -19,23 +19,23 @@ class PlanSeeder extends Seeder
             'description' => 'Ideal para freelancers que precisam de uma mesa ocasionalmente.',
             'price' => 99.90,
             'hours_room' => 0,
-            'hours_desk' => 20,
+            'hours_desk' => 50,
         ]);
 
         $premium = Plan::create([
             'name' => 'Premium',
             'description' => 'Para profissionais que precisam de salas privativas com frequência.',
             'price' => 299.90,
-            'hours_room' => 40,
-            'hours_desk' => 40,
+            'hours_room' => 120,
+            'hours_desk' => 120,
         ]);
 
         $business = Plan::create([
             'name' => 'Empresarial',
             'description' => 'Pacote completo com auditório e múltiplas salas.',
             'price' => 799.90,
-            'hours_room' => 100,
-            'hours_desk' => 100,
+            'hours_room' => 200,
+            'hours_desk' => 200,
         ]);
 
         // Cria algumas salas
@@ -49,22 +49,20 @@ class PlanSeeder extends Seeder
         $privateRoom = Room::create([
             'name' => 'Sala privativa',
             'type' => 'room',
-            'capacity' => 4,
+            'capacity' => 8,
             'description' => 'Sala exclusiva para reuniões pequenas.'
         ]);
 
         $auditorium = Room::create([
             'name' => 'Auditório',
             'type' => 'auditorium',
-            'capacity' => 50,
+            'capacity' => 60,
             'description' => 'Espaço para palestras e eventos empresariais.'
         ]);
 
         // Relacionando planos e salas (pivot plan_room)
         $basic->rooms()->attach($desk->id);
-
         $premium->rooms()->attach([$desk->id, $privateRoom->id]);
-
         $business->rooms()->attach([$desk->id, $privateRoom->id, $auditorium->id]);
     }
 }
