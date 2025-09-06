@@ -11,6 +11,7 @@ class Subscription extends Model
         'plan_id',
         'start_date',
         'end_date',
+        'status',
         'remaining_hours_room',
         'remaining_hours_desk'
     ];

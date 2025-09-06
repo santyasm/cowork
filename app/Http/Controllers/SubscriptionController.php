@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSubscriptionRequest;
 use App\Models\Plan;
+use App\Models\Reservation;
 use App\Models\Subscription;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class SubscriptionController extends Controller
 {
@@ -52,8 +54,6 @@ class SubscriptionController extends Controller
     public function store(StoreSubscriptionRequest $request)
     {
         $data = $request->validated();
-
-
         $plan = Plan::findOrFail($data['plan_id']);
 
         try {
@@ -70,9 +70,9 @@ class SubscriptionController extends Controller
                 'remaining_hours_desk' => $plan->hours_desk
             ]);
 
-            return redirect()->back()->with('success', 'Assinatura criada com sucesso!');
+            return Inertia::location(route('subscriptions.index'));
         } catch (\Exception $ex) {
-            return response()->json(['Erro ao inserir assinaturas: ' => $ex->getMessage()], 400);
+            return response()->json(['Erro ao inserir assinatura: ' => $ex->getMessage()], 400);
         }
     }
 
@@ -106,5 +106,33 @@ class SubscriptionController extends Controller
     public function destroy(Subscription $subscription)
     {
         //
+    }
+
+    public function cancel(Request $request)
+    {
+        $request->validate(['id' => 'required|exists:subscriptions,id']);
+        try {
+            $subscription = Subscription::findOrFail($request->id);
+            $user = Auth::user();
+
+            if ($subscription->user_id !== $user->id) {
+                abort(403, 'Acesso negado');
+            }
+
+            $subscription->update([
+                'status' => 'canceled',
+                'end_date' => Carbon::now(),
+                'remaining_hours_room' => 0,
+                'remaining_hours_desk' => 0,
+            ]);
+
+            Reservation::where('user_id', $user->id)
+                ->where('status', 'active')
+                ->update(['status' => 'canceled']);
+
+            return Inertia::location((route('subscriptions.index')));
+        } catch (\Exception $ex) {
+            return response()->json(['Erro ao cancelar assinatura: ' => $ex->getMessage()], 400);
+        }
     }
 }
