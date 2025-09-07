@@ -1,9 +1,9 @@
 const feedbacks = [
-    { name: 'João Santana', text: 'Facilitou muito a rotina do meu time, recomendo demais 🚀', avatar: '/images/feedbacks/joao.jpg' },
-    { name: 'Carlos Silva', text: 'O Cowork mudou a forma como administro meu espaço. Simples e eficiente!', avatar: '/images/feedbacks/carlos.jpg' },
-    { name: 'Larissa Lima', text: 'Adorei a praticidade e o suporte rápido!', avatar: '/images/feedbacks/larissa.jpg' },
-    { name: 'Elis Braga', text: 'Conectou minha comunidade de forma incrível.', avatar: '/images/feedbacks/maria.jpg' },
-    { name: 'Liam Souza', text: 'Finalmente uma solução pensada para coworkings de verdade.', avatar: '/images/feedbacks/liam.jpg' },
+    { name: 'João Santana', text: 'Facilitou muito a rotina do meu time, recomendo demais 🚀', avatar: '/images/feedbacks/joao.png' },
+    { name: 'Carlos Silva', text: 'O Cowork mudou a forma como administro meu espaço. Simples e eficiente!', avatar: '/images/feedbacks/carlos.png' },
+    { name: 'Larissa Lima', text: 'Adorei a praticidade e o suporte rápido!', avatar: '/images/feedbacks/larissa.png' },
+    { name: 'Elis Braga', text: 'Conectou minha comunidade de forma incrível.', avatar: '/images/feedbacks/maria.png' },
+    { name: 'Liam Souza', text: 'Finalmente uma solução pensada para coworkings de verdade.', avatar: '/images/feedbacks/liam.png' },
 ];
 
 const colors = [
