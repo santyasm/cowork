@@ -1,13 +1,11 @@
-// components/sections/Feedbacks.tsx
 const feedbacks = [
-    { name: 'Carlos Silva', text: 'O Cowork mudou a forma como administro meu espaço. Simples e eficiente!', avatar: '/images/feedbacks/carlos.png' },
-    { name: 'João Santana', text: 'Facilitou muito a rotina do meu time, recomendo demais 🚀', avatar: '/images/feedbacks/joao.png' },
-    { name: 'Liam Souza', text: 'Finalmente uma solução pensada para coworkings de verdade.', avatar: '/images/feedbacks/liam.png' },
-    { name: 'Fabio Souza', text: 'Adorei a praticidade e o suporte rápido!', avatar: '/images/feedbacks/fabio.png' },
-    { name: 'Lucas Souza', text: 'Conectou minha comunidade de forma incrível.', avatar: '/images/feedbacks/lucas.png' },
+    { name: 'João Santana', text: 'Facilitou muito a rotina do meu time, recomendo demais 🚀', avatar: '/images/feedbacks/joao.jpg' },
+    { name: 'Carlos Silva', text: 'O Cowork mudou a forma como administro meu espaço. Simples e eficiente!', avatar: '/images/feedbacks/carlos.jpg' },
+    { name: 'Larissa Lima', text: 'Adorei a praticidade e o suporte rápido!', avatar: '/images/feedbacks/larissa.jpg' },
+    { name: 'Elis Braga', text: 'Conectou minha comunidade de forma incrível.', avatar: '/images/feedbacks/maria.jpg' },
+    { name: 'Liam Souza', text: 'Finalmente uma solução pensada para coworkings de verdade.', avatar: '/images/feedbacks/liam.jpg' },
 ];
 
-// Cores diferentes para os cards
 const colors = [
     'bg-[#D3F985] dark:bg-[#D3F985]/40',
     'bg-gray-100 dark:bg-gray-500/40',
@@ -54,7 +52,7 @@ export function FeedbacksSection() {
                     {feedbacks.map((fb, i) => (
                         <div
                             key={i}
-                            className={`flex h-[300px] w-[80%] flex-shrink-0 snap-center flex-col justify-center gap-4 rounded-2xl border border-gray-200 p-6 shadow-sm dark:border-gray-700 ${colors[i % colors.length]}`}
+                            className={`flex h-[300px] w-[80%] flex-shrink-0 snap-center flex-col justify-center gap-4 rounded-2xl p-6 shadow-sm ${colors[i % colors.length]}`}
                         >
                             <img src={fb.avatar} alt={fb.name} className="h-24 w-24 self-center rounded-full object-cover" />
                             <p className="text-gray-700 italic dark:text-gray-300">“{fb.text}”</p>
