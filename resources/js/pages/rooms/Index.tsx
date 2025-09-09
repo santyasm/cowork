@@ -1,7 +1,10 @@
+import { DateTimePicker } from '@/components/ui/date-picker';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
+import { Button } from '@headlessui/react';
 import { Form, usePage } from '@inertiajs/react';
+import { format } from 'date-fns';
 import { CheckCircle2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -14,55 +17,31 @@ interface Room {
 }
 
 export default function Index() {
+    const [startTime, setStartTime] = useState<Date | null>(null);
+    const [endTime, setEndTime] = useState<Date | null>(null);
+    const [hoursUsed, setHoursUsed] = useState<number>(1);
+
     const { rooms } = usePage<{ rooms: Room[] }>().props;
     const { flash } = usePage<{ flash: { success?: string; error?: string } }>().props;
 
     const [showSuccess, setShowSuccess] = useState(false);
 
-    const breadcrumbs: BreadcrumbItem[] = [
-        {
-            title: 'Salas',
-            href: '/plans',
-        },
-    ];
+    const breadcrumbs: BreadcrumbItem[] = [{ title: 'Salas', href: '/plans' }];
 
-    const getNow = () => {
-        const now = new Date();
-        now.setSeconds(0, 0);
-        return now;
+    const formatDateForMySQL = (date: Date) => {
+        const pad = (n: number) => String(n).padStart(2, '0');
+        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:00`;
     };
 
-    const formatDateTimeLocal = (date: Date) => {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
+    const handleHoursChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setHoursUsed(value);
 
-        return `${year}-${month}-${day}T${hours}:${minutes}`;
-    };
-
-    const [startTime, setStartTime] = useState(() => {
-        const plusTenMinutes = new Date(getNow().getTime() + 10 * 60 * 1000);
-        return formatDateTimeLocal(plusTenMinutes);
-    });
-
-    const [endTime, setEndTime] = useState(() => {
-        const plusOneHour = new Date(new Date(getNow().getTime() + 10 * 60 * 1000).getTime() + 60 * 60 * 1000);
-        return formatDateTimeLocal(plusOneHour);
-    });
-
-    const handleStartChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const newStart = new Date(e.target.value);
-        setStartTime(e.target.value);
-
-        const minEnd = new Date(newStart.getTime() + 60 * 60 * 1000);
-        if (new Date(endTime) < minEnd) {
-            setEndTime(formatDateTimeLocal(minEnd));
+        const numValue = parseInt(value);
+        if (!isNaN(numValue) && startTime) {
+            setEndTime(new Date(startTime.getTime() + numValue * 60 * 60 * 1000));
         }
     };
-
-    const minEndTime = formatDateTimeLocal(new Date(new Date(startTime).getTime() + 60 * 60 * 1000));
 
     useEffect(() => {
         if (flash?.success) {
@@ -100,7 +79,6 @@ export default function Index() {
                                 <span className="text-sm text-gray-400">{room.type}</span>
                             </div>
 
-                            {/* Imagem com zoom */}
                             <Dialog>
                                 <DialogTrigger asChild>
                                     <img
@@ -109,7 +87,6 @@ export default function Index() {
                                         className="h-[220px] w-full cursor-pointer rounded-lg object-cover transition-transform duration-500 ease-in-out hover:scale-105"
                                     />
                                 </DialogTrigger>
-
                                 <DialogContent className="max-w-lg">
                                     <DialogHeader>
                                         <DialogTitle className="text-2xl font-bold">{room.name}</DialogTitle>
@@ -131,18 +108,15 @@ export default function Index() {
                                         Reservar
                                     </button>
                                 </DialogTrigger>
-
                                 <DialogContent className="max-w-lg">
                                     <DialogHeader>
                                         <DialogTitle className="text-2xl font-bold">{room.name}</DialogTitle>
                                     </DialogHeader>
-
                                     <img
                                         src={`/images/rooms/${room.id}.jpg`}
                                         alt={room.name}
-                                        className="aspect-video w-full rounded-md object-cover"
+                                        className="aspect-video max-h-[10vh] w-full rounded-md object-cover md:max-h-[20vh]"
                                     />
-
                                     <p className="mt-3 text-gray-700 dark:text-gray-300">Capacidade: {room.capacity}</p>
                                     <p className="mt-2 text-gray-600 dark:text-gray-400">{room.description}</p>
 
@@ -152,48 +126,54 @@ export default function Index() {
                                         transform={(data) => ({
                                             ...data,
                                             room_id: room.id,
-                                            start_time: startTime,
-                                            end_time: endTime,
+                                            start_time: startTime ? formatDateForMySQL(startTime) : '',
+                                            end_time: endTime ? formatDateForMySQL(endTime) : '',
                                         })}
                                         disableWhileProcessing
                                     >
                                         {({ processing, errors }) => (
                                             <div className="mt-6 flex flex-col gap-4">
+                                                {/* Start Time Picker */}
                                                 <div>
                                                     <label className="mb-1 block font-medium">Início da reserva</label>
-                                                    <input
-                                                        type="datetime-local"
-                                                        name="start_time"
+
+                                                    <DateTimePicker
                                                         value={startTime}
-                                                        min={formatDateTimeLocal(getNow())}
-                                                        onChange={handleStartChange}
-                                                        className="w-full rounded-md border p-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
+                                                        onChange={(newDate) => {
+                                                            setStartTime(newDate);
+                                                            setEndTime(new Date(newDate.getTime() + hoursUsed * 60 * 60 * 1000));
+                                                        }}
+                                                    />
+                                                </div>
+
+                                                <div>
+                                                    <label className="mb-1 block font-medium">Quantidade de horas</label>
+                                                    <input
+                                                        type="number"
+                                                        min={1}
+                                                        step={1}
+                                                        value={hoursUsed}
+                                                        onChange={handleHoursChange}
+                                                        className="w-24 rounded-md border p-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
                                                         required
                                                     />
                                                 </div>
 
                                                 <div>
                                                     <label className="mb-1 block font-medium">Fim da reserva</label>
-                                                    <input
-                                                        type="datetime-local"
-                                                        name="end_time"
-                                                        value={endTime}
-                                                        min={minEndTime}
-                                                        onChange={(e) => setEndTime(e.target.value)}
-                                                        className="w-full rounded-md border p-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
-                                                        required
-                                                    />
+                                                    <Button variant="outline" className="w-full text-left" disabled>
+                                                        {endTime ? format(endTime, 'yyyy-MM-dd HH:mm') : '-'}
+                                                    </Button>
                                                 </div>
 
                                                 <button
                                                     className="mt-2 w-full rounded-md bg-green-600 px-4 py-2 font-semibold text-white transition hover:bg-green-700"
                                                     type="submit"
-                                                    disabled={processing}
+                                                    disabled={processing || !startTime}
                                                 >
                                                     {processing ? 'Aguarde...' : 'Confirmar Reserva'}
                                                 </button>
 
-                                                {/* Erros */}
                                                 {errors &&
                                                     Object.entries(errors).map(([field, messages]) =>
                                                         Array.isArray(messages) ? (
