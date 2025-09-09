@@ -41,14 +41,6 @@ class SubscriptionController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create(Request $request)
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreSubscriptionRequest $request)
@@ -74,38 +66,6 @@ class SubscriptionController extends Controller
         } catch (\Exception $ex) {
             return response()->json(['Erro ao inserir assinatura: ' => $ex->getMessage()], 400);
         }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Subscription $subscription)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Subscription $subscription)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Subscription $subscription)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Subscription $subscription)
-    {
-        //
     }
 
     public function cancel(Request $request)

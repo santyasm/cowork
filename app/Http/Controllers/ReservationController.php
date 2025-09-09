@@ -6,13 +6,9 @@ use App\Http\Requests\CancelReservationRequest;
 use App\Http\Requests\StoreReservationRequest;
 use App\Models\Reservation;
 use App\Models\Room;
-use App\Models\User;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
-use Inertia\Inertia;
 
 class ReservationController extends Controller
 {
