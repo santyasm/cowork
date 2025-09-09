@@ -71,7 +71,7 @@ export default function Dashboard() {
             <div className="m-6 space-y-6">
                 <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">Dashboard</h1>
 
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800">
                         <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Próxima reserva</h3>
                         {nextReservation ? (
