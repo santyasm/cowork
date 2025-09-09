@@ -4,6 +4,7 @@ import { BreadcrumbItem } from '@/types';
 import { Form, usePage } from '@inertiajs/react';
 import { CheckCircle2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+
 interface Room {
     id: number;
     name: string;
@@ -55,7 +56,6 @@ export default function Index() {
         const newStart = new Date(e.target.value);
         setStartTime(e.target.value);
 
-        // recalcula end se ele ficar inválido
         const minEnd = new Date(newStart.getTime() + 60 * 60 * 1000);
         if (new Date(endTime) < minEnd) {
             setEndTime(formatDateTimeLocal(minEnd));
@@ -76,123 +76,134 @@ export default function Index() {
         <AppLayout breadcrumbs={breadcrumbs}>
             {showSuccess && (
                 <Dialog open={showSuccess} onOpenChange={setShowSuccess}>
-                    <DialogContent>
-                        <CheckCircle2 className="text-green-600 duration-300 animate-in zoom-in" size={40} />
+                    <DialogContent className="flex flex-col items-center gap-3 text-center">
+                        <CheckCircle2 className="text-green-600 duration-300 animate-in zoom-in" size={48} />
                         <DialogHeader>
-                            <DialogTitle>Sucesso!</DialogTitle>
+                            <DialogTitle className="text-2xl font-bold text-green-600">Sucesso!</DialogTitle>
                         </DialogHeader>
-
-                        <p>{flash.success}</p>
+                        <p className="text-gray-600">{flash.success}</p>
                     </DialogContent>
                 </Dialog>
             )}
+
             <div className="m-5">
-                <h1 className="mb-4 text-2xl font-semibold">Salas</h1>
+                <h1 className="mb-6 text-3xl font-bold">Salas</h1>
 
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                     {rooms.map((room) => (
-                        <div key={room.id} className="flex flex-col justify-between gap-6 rounded-md border p-4">
+                        <div
+                            key={room.id}
+                            className="flex flex-col justify-between gap-6 rounded-2xl border bg-white p-5 shadow-sm transition hover:shadow-md dark:bg-gray-900"
+                        >
                             <div className="flex items-center justify-between">
-                                <h3 className="text-xl font-semibold">{room.name} </h3>
-
-                                <span className="text-gray-300">{room.type}</span>
+                                <h3 className="text-xl font-semibold">{room.name}</h3>
+                                <span className="text-sm text-gray-400">{room.type}</span>
                             </div>
 
+                            {/* Imagem com zoom */}
                             <Dialog>
                                 <DialogTrigger asChild>
                                     <img
                                         src={`/images/rooms/${room.id}.jpg`}
-                                        alt=""
-                                        className="h-[200px] w-full cursor-pointer rounded-md object-cover transition-transform duration-500 ease-in-out hover:scale-110"
+                                        alt={room.name}
+                                        className="h-[220px] w-full cursor-pointer rounded-lg object-cover transition-transform duration-500 ease-in-out hover:scale-105"
                                     />
                                 </DialogTrigger>
 
-                                <DialogContent>
+                                <DialogContent className="max-w-lg">
                                     <DialogHeader>
-                                        <DialogTitle>{room.name}</DialogTitle>
+                                        <DialogTitle className="text-2xl font-bold">{room.name}</DialogTitle>
                                     </DialogHeader>
-
                                     <img
                                         src={`/images/rooms/${room.id}.jpg`}
-                                        alt=""
-                                        className="aspect-video h-[300px] w-auto bg-amber-100 object-cover transition-transform duration-300 hover:scale-105"
+                                        alt={room.name}
+                                        className="aspect-video w-full rounded-md object-cover"
                                     />
-                                    <p>Capacidade: {room.capacity}</p>
-                                    <p className="mt-2 text-gray-600">{room.description}</p>
+                                    <p className="mt-3 text-gray-700 dark:text-gray-300">Capacidade: {room.capacity}</p>
+                                    <p className="mt-2 text-gray-600 dark:text-gray-400">{room.description}</p>
                                 </DialogContent>
                             </Dialog>
 
+                            {/* Reserva */}
                             <Dialog>
                                 <DialogTrigger asChild>
-                                    <button
-                                        className="cursor-pointer rounded-sm bg-green-600 p-1 px-4 font-medium text-white hover:bg-green-700"
-                                        type="submit"
-                                    >
-                                        {'Reservar'}
+                                    <button className="w-full rounded-md bg-green-600 px-4 py-2 font-medium text-white transition hover:bg-green-700">
+                                        Reservar
                                     </button>
                                 </DialogTrigger>
 
-                                <DialogContent>
+                                <DialogContent className="max-w-lg">
                                     <DialogHeader>
-                                        <DialogTitle>{room.name}</DialogTitle>
+                                        <DialogTitle className="text-2xl font-bold">{room.name}</DialogTitle>
                                     </DialogHeader>
 
                                     <img
                                         src={`/images/rooms/${room.id}.jpg`}
-                                        alt=""
-                                        className="aspect-video h-[100px] w-full rounded-md bg-amber-100 object-cover transition-transform duration-300 hover:scale-105 md:h-[300px]"
+                                        alt={room.name}
+                                        className="aspect-video w-full rounded-md object-cover"
                                     />
-                                    <p>Capacidade: {room.capacity}</p>
-                                    <p className="mt-2 text-gray-600">{room.description}</p>
+
+                                    <p className="mt-3 text-gray-700 dark:text-gray-300">Capacidade: {room.capacity}</p>
+                                    <p className="mt-2 text-gray-600 dark:text-gray-400">{room.description}</p>
 
                                     <Form
                                         action="/reservations"
                                         method="POST"
-                                        transform={(data) => ({ ...data, room_id: room.id, start_time: startTime, end_time: endTime })}
+                                        transform={(data) => ({
+                                            ...data,
+                                            room_id: room.id,
+                                            start_time: startTime,
+                                            end_time: endTime,
+                                        })}
                                         disableWhileProcessing
                                     >
                                         {({ processing, errors }) => (
-                                            <div className="mt-4 flex flex-col gap-2">
-                                                <label className="font-medium">Início da reserva</label>
-                                                <input
-                                                    type="datetime-local"
-                                                    name="start_time"
-                                                    value={startTime}
-                                                    min={formatDateTimeLocal(getNow())}
-                                                    onChange={handleStartChange}
-                                                    className="rounded-md border p-2"
-                                                    required
-                                                />
+                                            <div className="mt-6 flex flex-col gap-4">
+                                                <div>
+                                                    <label className="mb-1 block font-medium">Início da reserva</label>
+                                                    <input
+                                                        type="datetime-local"
+                                                        name="start_time"
+                                                        value={startTime}
+                                                        min={formatDateTimeLocal(getNow())}
+                                                        onChange={handleStartChange}
+                                                        className="w-full rounded-md border p-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
+                                                        required
+                                                    />
+                                                </div>
 
-                                                <label className="mt-2 font-medium">Fim da reserva</label>
-                                                <input
-                                                    type="datetime-local"
-                                                    name="end_time"
-                                                    value={endTime}
-                                                    min={minEndTime}
-                                                    onChange={(e) => setEndTime(e.target.value)}
-                                                    className="rounded-md border p-2"
-                                                    required
-                                                />
+                                                <div>
+                                                    <label className="mb-1 block font-medium">Fim da reserva</label>
+                                                    <input
+                                                        type="datetime-local"
+                                                        name="end_time"
+                                                        value={endTime}
+                                                        min={minEndTime}
+                                                        onChange={(e) => setEndTime(e.target.value)}
+                                                        className="w-full rounded-md border p-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
+                                                        required
+                                                    />
+                                                </div>
 
                                                 <button
-                                                    className="mt-4 cursor-pointer rounded-sm bg-green-600 p-1 px-4 font-medium text-white hover:bg-green-700"
+                                                    className="mt-2 w-full rounded-md bg-green-600 px-4 py-2 font-semibold text-white transition hover:bg-green-700"
                                                     type="submit"
                                                     disabled={processing}
                                                 >
-                                                    {processing ? 'Aguarde...' : 'Reservar'}
+                                                    {processing ? 'Aguarde...' : 'Confirmar Reserva'}
                                                 </button>
 
+                                                {/* Erros */}
                                                 {errors &&
                                                     Object.entries(errors).map(([field, messages]) =>
                                                         Array.isArray(messages) ? (
                                                             messages.map((msg, i) => (
-                                                                <span key={`${field}-${i}`} className="text-md font-medium text-red-600">
+                                                                <span key={`${field}-${i}`} className="text-sm font-medium text-red-600">
                                                                     {msg}
                                                                 </span>
                                                             ))
                                                         ) : (
-                                                            <span key={field} className="text-md font-medium text-red-600">
+                                                            <span key={field} className="text-sm font-medium text-red-600">
                                                                 {messages}
                                                             </span>
                                                         ),
