@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CancelReservationRequest;
 use App\Http\Requests\StoreReservationRequest;
 use App\Models\Reservation;
 use App\Models\Room;
 use App\Models\User;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class ReservationController extends Controller
@@ -20,17 +23,6 @@ class ReservationController extends Controller
     {
         //
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-
-
 
     public function store(StoreReservationRequest $request)
     {
@@ -82,36 +74,31 @@ class ReservationController extends Controller
     }
 
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Reservation $reservation)
+    function cancel(CancelReservationRequest $request)
     {
-        //
-    }
+        $data = $request->validated();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Reservation $reservation)
-    {
-        //
-    }
+        try {
+            $user = Auth::user();
+            $reservation = Reservation::with('room')->findOrFail($data["reservation_id"]);
+            $hours_used = $reservation->hours_used;
+            $reservationRoomType = $reservation->room->type;
+            $userSubscription = $user->subscriptions->where("status", "active")->first();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Reservation $reservation)
-    {
-        //
-    }
+            $reservation->update([
+                "status" => "canceled"
+            ]);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Reservation $reservation)
-    {
-        //
+            if ($reservationRoomType === "desk") {
+                $userSubscription->increment("remaining_hours_desk", $hours_used);
+            } else {
+                $userSubscription->increment("remaining_hours_room", $hours_used);
+            }
+
+            return redirect()->back()->with('success', 'Reserva cancelada com sucesso!');
+        } catch (\Exception $ex) {
+            return response()->json(['error' => 'Erro ao cancelar reserva.', 'message' => $ex->getMessage()], 400);
+        }
     }
 
     /**

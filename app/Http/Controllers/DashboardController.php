@@ -22,7 +22,7 @@ class DashboardController extends Controller
         $allReservations = $user
             ->reservations()
             ->with('room')
-            ->orderBy('start_time', 'asc')
+            ->orderBy('updated_at', 'desc')
             ->paginate(20);
 
         $activeReservations = $user

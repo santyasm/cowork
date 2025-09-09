@@ -1,6 +1,9 @@
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import AppLayout from '@/layouts/app-layout';
-import { usePage } from '@inertiajs/react';
+import { Form, usePage } from '@inertiajs/react';
 import dayjs from 'dayjs';
+import { CheckCircle2, MessageCircleWarning } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface Room {
     id: number;
@@ -34,12 +37,37 @@ export default function Dashboard() {
         userActiveReservations: Reservation;
         userActiveSubscription: Subscription;
     }>().props;
+    const { flash } = usePage<{ flash: { success?: string; error?: string } }>().props;
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [errorDialog, setErrorDialog] = useState<{ [key: number]: string }>({});
+    const [confirmDialog, setConfirmDialog] = useState<number | null>(null);
 
     const activeReservations = userActiveReservations.data;
     const nextReservation = activeReservations[0];
 
+    useEffect(() => {
+        if (flash?.success) {
+            setShowSuccess(true);
+            const timer = setTimeout(() => setShowSuccess(false), 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [flash]);
+
     return (
         <AppLayout>
+            {showSuccess && (
+                <Dialog open={showSuccess} onOpenChange={setShowSuccess}>
+                    <DialogContent>
+                        <CheckCircle2 className="text-green-600 duration-300 animate-in zoom-in" size={40} />
+                        <DialogHeader>
+                            <DialogTitle>Sucesso!</DialogTitle>
+                        </DialogHeader>
+
+                        <p>{flash.success}</p>
+                    </DialogContent>
+                </Dialog>
+            )}
+
             <div className="m-6 space-y-6">
                 <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">Dashboard</h1>
 
@@ -103,9 +131,88 @@ export default function Dashboard() {
                                 activeReservations.map((reservation) => (
                                     <li key={reservation.id} className="flex justify-between border-b border-gray-200 pb-2 dark:border-gray-700">
                                         <span className="text-gray-900 dark:text-gray-100">{reservation.room.name}</span>
-                                        <span className="text-gray-500 dark:text-gray-400">
-                                            {dayjs(reservation.start_time).format('DD/MM')} - {dayjs(reservation.start_time).format('HH:mm')}
-                                        </span>
+
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-gray-500 dark:text-gray-400">
+                                                {dayjs(reservation.start_time).format('DD/MM')} - {dayjs(reservation.start_time).format('HH:mm')}
+                                            </span>
+
+                                            {/* Botão que abre dialog de confirmação */}
+                                            <button type="button" onClick={() => setConfirmDialog(reservation.id)} className="hover:text-gray-400">
+                                                Cancelar
+                                            </button>
+
+                                            <Dialog open={confirmDialog === reservation.id} onOpenChange={() => setConfirmDialog(null)}>
+                                                <DialogContent>
+                                                    <DialogHeader>
+                                                        <DialogTitle>Confirmar cancelamento</DialogTitle>
+                                                    </DialogHeader>
+                                                    <p>
+                                                        Tem certeza que deseja cancelar a reserva da sala <strong>{reservation.room.name}</strong>?
+                                                    </p>
+
+                                                    <div className="mt-4 flex justify-end gap-3">
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setConfirmDialog(null)}
+                                                            className="rounded-md border px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+                                                        >
+                                                            Voltar
+                                                        </button>
+
+                                                        <Form
+                                                            action="/reservations/cancel"
+                                                            method="PATCH"
+                                                            transform={(data) => ({
+                                                                ...data,
+                                                                reservation_id: reservation.id,
+                                                            })}
+                                                        >
+                                                            {({ errors }) => {
+                                                                const firstError =
+                                                                    errors && Object.values(errors)[0]
+                                                                        ? Array.isArray(Object.values(errors)[0])
+                                                                            ? (Object.values(errors)[0] as string[])[0]
+                                                                            : (Object.values(errors)[0] as string)
+                                                                        : null;
+
+                                                                // eslint-disable-next-line react-hooks/rules-of-hooks
+                                                                useEffect(() => {
+                                                                    if (firstError) {
+                                                                        setErrorDialog((prev) => ({
+                                                                            ...prev,
+                                                                            [reservation.id]: firstError,
+                                                                        }));
+                                                                    }
+                                                                }, [firstError]);
+
+                                                                return (
+                                                                    <button
+                                                                        type="submit"
+                                                                        className="rounded-md bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-700"
+                                                                    >
+                                                                        Confirmar
+                                                                    </button>
+                                                                );
+                                                            }}
+                                                        </Form>
+                                                    </div>
+                                                </DialogContent>
+                                            </Dialog>
+
+                                            <Dialog
+                                                open={!!errorDialog[reservation.id]}
+                                                onOpenChange={() => setErrorDialog((prev) => ({ ...prev, [reservation.id]: '' }))}
+                                            >
+                                                <DialogContent>
+                                                    <MessageCircleWarning className="text-red-700 duration-300 animate-in zoom-in" size={40} />
+                                                    <DialogHeader>
+                                                        <DialogTitle>Erro ao cancelar</DialogTitle>
+                                                    </DialogHeader>
+                                                    <p>{errorDialog[reservation.id]}</p>
+                                                </DialogContent>
+                                            </Dialog>
+                                        </div>
                                     </li>
                                 ))
                             ) : (
