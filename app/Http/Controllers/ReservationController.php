@@ -17,7 +17,8 @@ class ReservationController extends Controller
      */
     public function index()
     {
-        //
+        $allReservations = Reservation::orderBy('updated_at', 'desc')->get();
+        return response()->json($allReservations);
     }
 
     public function store(StoreReservationRequest $request)
