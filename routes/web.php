@@ -3,7 +3,6 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\RoomController;
-use App\Http\Controllers\SubscriptionController;
 use App\Models\Plan;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;

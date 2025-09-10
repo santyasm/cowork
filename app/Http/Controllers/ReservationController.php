@@ -12,15 +12,6 @@ use Illuminate\Support\Facades\Auth;
 
 class ReservationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        $allReservations = Reservation::orderBy('updated_at', 'desc')->get();
-        return response()->json($allReservations);
-    }
-
     public function store(StoreReservationRequest $request)
     {
         $data = $request->validated();
