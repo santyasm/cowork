@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import AppLayout from '../../layouts/app-layout';
 
-interface Subscription {
+export interface Subscription {
     id: number;
     status: string;
     start_date: string;
@@ -16,7 +16,7 @@ interface Subscription {
     };
 }
 
-interface User {
+export interface User {
     id: number;
     name: string;
     email: string;
@@ -57,6 +57,10 @@ const Users = ({ allUsers }: Props) => {
         active: 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100',
         expired: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100',
         cancelled: 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100',
+    };
+
+    const goToUserDetails = (userId: number) => {
+        router.get(`/admin/users/${userId}`);
     };
 
     return (
@@ -114,13 +118,13 @@ const Users = ({ allUsers }: Props) => {
                             </div>
 
                             <div className="mt-4 flex flex-wrap gap-2">
-                                <Button variant="outline" size="sm">
+                                {/* <Button variant="outline" size="sm">
                                     Editar
                                 </Button>
                                 <Button variant="destructive" size="sm">
                                     Deletar
-                                </Button>
-                                <Button variant="ghost" size="sm">
+                                </Button> */}
+                                <Button variant="outline" size="sm" onClick={() => goToUserDetails(user.id)}>
                                     Detalhes
                                 </Button>
                             </div>

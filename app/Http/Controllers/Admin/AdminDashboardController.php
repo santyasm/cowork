@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Reservation;
+use App\Models\Subscription;
+use Illuminate\Support\Carbon;
 use Inertia\Inertia;
 
 class AdminDashboardController extends Controller
@@ -14,6 +16,7 @@ class AdminDashboardController extends Controller
     public function index()
     {
         $allReservations = Reservation::orderBy('updated_at', 'desc')->get();
+        $subscriptions = Subscription::all();
 
         return Inertia::render('admin/admin-dashboard', [
             'allReservations' => $allReservations,

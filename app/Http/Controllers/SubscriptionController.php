@@ -22,7 +22,7 @@ class SubscriptionController extends Controller
         try {
             $user = Auth::user();
 
-            $subscriptions = Auth::user()
+            $subscriptions = $user
                 ->subscriptions()
                 ->with('plan')
                 ->get();

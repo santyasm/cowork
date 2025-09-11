@@ -37,4 +37,23 @@ class AdminUserController extends Controller
             'search' => $search
         ]);
     }
+
+    public function show(string $id)
+    {
+        $user = User::with([
+            'subscriptions' => function ($q) {
+                $q->orderBy('start_date', 'desc')
+                    ->orderBy('created_at', 'desc')
+                    ->with('plan');
+            },
+            'reservations' => function ($q) {
+                $q->orderBy('start_time', 'desc')
+                    ->with('room');
+            },
+        ])->findOrFail($id);
+
+        return Inertia::render('admin/user-details', [
+            'user' => $user
+        ]);
+    }
 }
