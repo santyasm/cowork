@@ -33,7 +33,7 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withSchedule(function (Schedule $schedule) {
         $schedule->command(UpdateSubscriptions::class)->daily();
-        $schedule->command(UpdateReservations::class)->everyMinute();
+        $schedule->command(UpdateReservations::class)->hourly();
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
