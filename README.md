@@ -47,6 +47,9 @@ Usuários podem **reservar salas ou mesas**, contratar planos e acompanhar suas 
 - Reserva de salas com **definição de data/hora**.
 - Controle automático de disponibilidade (sem sobreposição de reservas).
 - Painel do usuário para acompanhar reservas ativas.
+- Painel do administrador com:
+    - 📊 Gráficos de reservas (ativas, concluídas e canceladas).
+    - 📋 Listagem de usuários do sistema, incluindo nome, e-mail, assinaturas e reservas.
 - Integração com tema **dark mode**.
 - Otimizações de **SEO** (Open Graph, meta tags).
 
@@ -144,6 +147,12 @@ npm run build
 <img src="./public/images/screenshots/screen1.png" width="500" />
 <img src="./public/images/screenshots/screen2.png" width="500" />
 <img src="./public/images/screenshots/screen3.png" width="500" />
+
+### Telas de usuário administrador
+
+<img src="./public/images/screenshots/admin-screen1.png" width="500" />
+<img src="./public/images/screenshots/admin-screen2.png" width="500" />
+<img src="./public/images/screenshots/admin-screen3.png" width="500" />
 
 ## Licenca
 
