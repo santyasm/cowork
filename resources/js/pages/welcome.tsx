@@ -43,7 +43,7 @@ export default function Welcome() {
                         <div className="flex gap-2">
                             {auth.user ? (
                                 <Link
-                                    href={dashboard()}
+                                    href={auth.user.role === 'admin' ? '/admin/dashboard' : dashboard()}
                                     className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
                                 >
                                     Dashboard
@@ -90,7 +90,7 @@ export default function Welcome() {
                                 </Link>
                             </span>
                         </div>
-                        <img src="/images/hero.png" className="md:max-w-[66vw] lg:max-w-[40vw]" alt="" />
+                        <img src="/images/hero.png" className="rounded-3xl md:max-w-[66vw] lg:max-w-[40vw]" alt="" />
                     </main>
                 </div>
 

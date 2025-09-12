@@ -21,13 +21,8 @@ class SubscriptionController extends Controller
     {
         try {
             $user = Auth::user();
-            if ($user->role === 'admin') {
-                $subscriptions = Subscription::all();
-                return response()->json($subscriptions, 200);
-            }
 
-
-            $subscriptions = Auth::user()
+            $subscriptions = $user
                 ->subscriptions()
                 ->with('plan')
                 ->get();

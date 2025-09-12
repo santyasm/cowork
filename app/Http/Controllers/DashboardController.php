@@ -8,16 +8,9 @@ use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
-    // Reservas do usuário logado
     public function index()
     {
         $user = Auth::user();
-
-        // Conclui reservas
-        $user->reservations()
-            ->where('status', 'active')
-            ->where('end_time', '<=', Carbon::now())
-            ->update(['status' => 'completed']);
 
         $allReservations = $user
             ->reservations()

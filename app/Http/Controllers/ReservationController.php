@@ -12,14 +12,6 @@ use Illuminate\Support\Facades\Auth;
 
 class ReservationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
     public function store(StoreReservationRequest $request)
     {
         $data = $request->validated();
