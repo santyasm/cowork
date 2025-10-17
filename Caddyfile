@@ -1,0 +1,9 @@
+:8080 {
+    root * /var/www/html/public
+    
+    encode zstd gzip
+
+    php_fastcgi localhost:9000
+
+    file_server
+}
