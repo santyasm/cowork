@@ -1,6 +1,7 @@
 FROM php:8.2-fpm-alpine
 
 RUN apk add --no-cache \
+    caddy \ 
     git \
     curl \
     libpng-dev \
@@ -20,6 +21,10 @@ WORKDIR /var/www/html
 
 COPY . .
 
+COPY Caddyfile /etc/caddy/Caddyfile
+COPY start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
+
 RUN composer install --no-dev --optimize-autoloader
 
 RUN npm install
@@ -27,6 +32,7 @@ RUN npm run build
 
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-EXPOSE 9000
+EXPOSE 8080
 
-CMD ["php-fpm"]
+CMD ["start.sh"]
+
