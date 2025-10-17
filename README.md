@@ -13,7 +13,7 @@ Sistema de gestão de coworking que permite reservas de salas e mesas, administr
 ## 🔗 Teste a Aplicação
 
 O sistema está disponível online no seguinte endereço:  
-[Acessar Cowork](https://cowork-app-main.laravel.cloud/)
+[Acessar Cowork](https://cowork.yasminsantana.fun/)
 
 > 💡 Esse link aponta para a versão em produção do projeto, onde você pode testar todas as funcionalidades como cadastro de usuários, reservas de salas e mesas, gestão de planos, etc.
 
