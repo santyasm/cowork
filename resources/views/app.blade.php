@@ -7,7 +7,7 @@
 
     <meta name="description" content="Sistema de cowork que permite reservar salas e mesas com planos personalizados">
     <meta name="keywords" content="cowork, reserva, salas, planos, mesas">
-    <meta name="author" content="Seu Nome">
+    <meta name="author" content="Yasmin Santana">
 
     <meta property="og:title" content="Cowork">
     <meta property="og:description" content="Reserve salas e mesas com facilidade">
